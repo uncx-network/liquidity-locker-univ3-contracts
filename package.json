@@ -1,0 +1,25 @@
+{
+  "name": "lock-uni-v3",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.8.2",
+    "@uniswap/sdk-core": "^3.2.2",
+    "@uniswap/v3-periphery": "^1.4.3",
+    "@uniswap/v3-sdk": "^3.9.0",
+    "bignumber.js": "^9.1.1",
+    "dotenv": "^16.0.3",
+    "keccak256": "^1.0.6"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.4",
+    "hardhat": "^2.19.5",
+    "hardhat-contract-sizer": "^2.10.0",
+    "hardhat-gas-reporter": "^1.0.10"
+  }
+}
