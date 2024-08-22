@@ -1,6 +1,6 @@
 
 // Set this to true to use a non forked rpc url (for deployments)
-const DEPLOY_MODE = false
+const DEPLOY_MODE = true
 
 var isPCSFork = false // is pancakeswap fork?
 

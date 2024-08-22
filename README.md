@@ -28,6 +28,7 @@ npx hardhat run scripts/deployMainnet.js
 npx hardhat run scripts/deployToken.js --network mainnet
 npx hardhat run scripts/deployMainnet.js --network bsc
 npx hardhat run scripts/deployFullRangeConvertor.js  --network bsc
+npx hardhat run scripts/deployFeeResolver.js  --network poly
 
 
 # ./contacts/uniswap-updated
