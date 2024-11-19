@@ -2,13 +2,13 @@ import { Token } from '@uniswap/sdk-core'
 import SETTINGS from '../../settings.js'
 
 const Self = {
-    async getUniToken (_address) {
+    async getUniToken(_address) {
         var erc = await Self.getMetadata(_address)
         var chainId = SETTINGS.chainId
-        var token = new Token(chainId, erc.address, erc.decimals, erc.symbol, erc.name)
+        var token = new Token(Number(chainId), erc.address, Number(erc.decimals), erc.symbol, erc.name)
         return token
     },
-    async getMetadata (_address) {
+    async getMetadata(_address) {
         return {
             name: await Self.getName(_address),
             symbol: await Self.getSymbol(_address),
@@ -57,7 +57,7 @@ const Self = {
         return decimals
     },
     async balanceOf(_tokenAddress, _address) {
-        var balanceABI = [{ "inputs": [ { "internalType": "address", "name": "account", "type": "address" } ], "name": "balanceOf", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }]
+        var balanceABI = [{ "inputs": [{ "internalType": "address", "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }]
         var tokenContract = new ethers.Contract(_tokenAddress, balanceABI, ethers.provider)
         var balance = await tokenContract.balanceOf(_address)
         return balance

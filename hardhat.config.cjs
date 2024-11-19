@@ -135,16 +135,16 @@ module.exports = {
     },
 
     hardhat: {
-      chainId: 1337,
+      chainId: 1,
       forking: {
         // BSC
         // url: process.env.BSC_PROVIDER
 
         // Eth Mainnet
-        // url: process.env.ETHEREUM_PROVIDER
+        url: process.env.ETHEREUM_PROVIDER
 
         // Avalanche
-        url: process.env.AVALANCHE_PROVIDER
+        // url: process.env.AVALANCHE_PROVIDER
 
         // Base
         // url: process.env.BASE_PROVIDER

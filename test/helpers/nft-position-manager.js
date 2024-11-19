@@ -19,7 +19,7 @@ const Self = {
 
         var priceLower = Self.token0PriceLower(token0, token1, position.tickLower)
         var priceUpper = Self.token0PriceUpper(token0, token1, position.tickUpper)
-        var sqrtRatioX96 = JSBI.BigInt(slot0.sqrtPriceX96)
+        var sqrtRatioX96 = JSBI.BigInt(slot0.sqrtPriceX96.toString())
         var token0Price = new Price(
             token0,
             token1,
@@ -51,7 +51,7 @@ const Self = {
         return Self.tickToPrice(token0, token1, tickUpper)
     },
     tickToPrice(baseToken, quoteToken, tick) {
-        const sqrtRatioX96 = TickMath.getSqrtRatioAtTick(tick)
+        const sqrtRatioX96 = TickMath.getSqrtRatioAtTick(Number(tick))
 
         const ratioX192 = JSBI.multiply(sqrtRatioX96, sqrtRatioX96)
 
@@ -112,16 +112,16 @@ const Self = {
             return 0
         } else if (slot0.tick < position.tickUpper) {
             return SqrtPriceMath.getAmount1Delta(
-                TickMath.getSqrtRatioAtTick(position.tickLower),
+                TickMath.getSqrtRatioAtTick(Number(position.tickLower)),
                 JSBI.BigInt(slot0.sqrtPriceX96),
                 JSBI.BigInt(position.liquidity),
                 false
             )
         } else {
             return SqrtPriceMath.getAmount1Delta(
-                TickMath.getSqrtRatioAtTick(position.tickLower),
-                TickMath.getSqrtRatioAtTick(position.tickUpper),
-                JSBI.BigInt(position.liquidity),
+                TickMath.getSqrtRatioAtTick(Number(position.tickLower)),
+                TickMath.getSqrtRatioAtTick(Number(position.tickUpper)),
+                JSBI.BigInt(position.liquidity.toString()),
                 false
             )
         }

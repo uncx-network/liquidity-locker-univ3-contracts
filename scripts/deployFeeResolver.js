@@ -1,7 +1,6 @@
 // 
 
 import hre from "hardhat"
-import SETTINGS from '../settings.js'
 
 async function main() {
 
@@ -9,7 +8,7 @@ async function main() {
 
   // SET THESE CONTRACT ADDRESSES
   const metamaskOwner = '0xAA3d85aD9D128DFECb55424085754F6dFa643eb1'
-  const lockerContract = '0x6b5360B419e0851b4b81644e0F63c1A9778f2506'
+  const lockerContract = '0x231278eDd38B00B07fBd52120CEf685B9BaEBCC1'
   const aSigner = '0xAA3d85aD9D128DFECb55424085754F6dFa643eb1'
   const bSigner = '0xAA3d85aD9D128DFECb55424085754F6dFa643eb1'
 

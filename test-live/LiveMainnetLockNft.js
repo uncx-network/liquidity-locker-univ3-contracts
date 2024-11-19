@@ -31,11 +31,12 @@ describe("Uniswap V3 Lockers", function () {
         const [owner, dustReceiver, bob, additionalCollector, autoCollector, lpFeeReceiver, collectFeeReceiver] = await ethers.getSigners();
 
         // Deploy Locker and initialize pool
-        const UniV3Locker = await ethers.getContractFactory("UNCX_ProofOfReservesV2_UniV3");
+        const UniV3Locker = await ethers.getContractFactory("UNCX_LiquidityLocker_UniV3");
         const univ3locker = await UniV3Locker.deploy(SETTINGS.contracts.CountryList, autoCollector.address, lpFeeReceiver.address, collectFeeReceiver.address);
+        await univ3locker.allowNftPositionManager(SETTINGS.contracts.NonfungiblePositionManager)
 
         var NftPositionManager = new ethers.Contract(SETTINGS.contracts.NonfungiblePositionManager, INonfungiblePositionManagerABI.abi, ethers.provider)
-        var UniswapV3Factory = new ethers.Contract(NftPositionManager.factory(), IUniswapV3Factory.abi, ethers.provider)
+        var UniswapV3Factory = new ethers.Contract(await NftPositionManager.factory(), IUniswapV3Factory.abi, ethers.provider)
         var SwapRouter = new ethers.Contract(SETTINGS.contracts.SwapRouter, ISwapRouter.abi, ethers.provider)
 
         const SimpleERC20 = await ethers.getContractFactory("Erc20Simple");
@@ -54,8 +55,8 @@ describe("Uniswap V3 Lockers", function () {
             /*
                 SET THIS NFT ID FROM A POSITION ON MAINNET TO SEE HOW IT WILL LOCK
             */
-           // 482922 = WETH / USDT (Requires safe approve or fails)
-            var nft_to_send = 43380 // The nft to test from mainnet
+            // 482922 = WETH / USDT (Requires safe approve or fails)
+            var nft_to_send = 860039 // The nft to test from mainnet
 
             var ownerOfNft = await NftPositionManager.ownerOf(nft_to_send)
             console.log('owner:', ownerOfNft)
@@ -80,7 +81,7 @@ describe("Uniswap V3 Lockers", function () {
             var slot0Before = await NftPositionManagerHelper.slot0(NftPositionManager, UniswapV3Factory, nft_to_send)
 
             console.log('one')
-            await NftPositionManager.connect(signer).approve(univ3locker.address, nft_to_send)
+            await NftPositionManager.connect(signer).approve(univ3locker.target, nft_to_send)
             await univ3locker.connect(owner).addOrEditFee(
                 "DEFAULT", // name
                 100, // lpFee
@@ -93,7 +94,7 @@ describe("Uniswap V3 Lockers", function () {
             var feeOption = await univ3locker.getFee("DEFAULT")
             if (feeOption.feeToken !== ethers.ZeroAddress) {
                 await feeToken.transfer(signer.address, feeOption.flatFee)
-                await feeToken.connect(signer).approve(univ3locker.address, feeOption.flatFee)
+                await feeToken.connect(signer).approve(univ3locker.target, feeOption.flatFee)
             }
             console.log('three', owner.address)
             await univ3locker.connect(signer).lock([
@@ -108,9 +109,9 @@ describe("Uniswap V3 Lockers", function () {
                 "DEFAULT",
                 []
             ],
-            {
-                value: feeOption.flatFeeToken === ethers.ZeroAddress ? feeOption.flatFee.toString() : 0
-            })
+                {
+                    value: feeOption.flatFeeToken === ethers.ZeroAddress ? feeOption.flatFee.toString() : 0
+                })
 
             console.log('hre3')
 
@@ -144,8 +145,8 @@ describe("Uniswap V3 Lockers", function () {
                 console.log('FLAT_FEE', ethers.formatUnits(flatFeeERCBalance.toString(), 18), await feeToken.symbol())
             }
 
-            var sumToken0 = ethers.BigNumber.from(liquidityAfter.positionAmount0.toString()).add(lpFeeToken0).add(dustToken0)
-            var sumToken1 = ethers.BigNumber.from(liquidityAfter.positionAmount1.toString()).add(lpFeeToken1).add(dustToken1)
+            var sumToken0 = BigInt(liquidityAfter.positionAmount0.toString()) + BigInt(lpFeeToken0) + BigInt(dustToken0)
+            var sumToken1 = BigInt(liquidityAfter.positionAmount1.toString()) + BigInt(lpFeeToken1) + BigInt(dustToken1)
             console.log('-------------------------------------------')
             console.log('---------- SUM TOTAL ----------------------')
             console.log('SUM', ethers.formatUnits(sumToken0.toString(), token0.decimals))
